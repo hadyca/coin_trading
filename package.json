@@ -1,0 +1,31 @@
+{
+  "name": "coin_trading",
+  "version": "1.0.0",
+  "description": "하하호호",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --exec babel-node index --delay 2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hadyca/coin_trading.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hadyca/coin_trading/issues"
+  },
+  "homepage": "https://github.com/hadyca/coin_trading#readme",
+  "devDependencies": {
+    "@babel/core": "^7.18.9",
+    "@babel/node": "^7.18.9",
+    "@babel/preset-env": "^7.18.9",
+    "nodemon": "^2.0.19"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "request": "^2.88.2"
+  }
+}
