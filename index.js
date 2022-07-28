@@ -1,22 +1,25 @@
-const express = require("express");
-const app = express();
+require("dotenv").config();
+const request = require("request");
+const uuidv4 = require("uuid/v4");
+const sign = require("jsonwebtoken").sign;
 
-const PORT = 4000;
+const access_key = process.env.UPBIT_OPEN_API_ACCESS_KEY;
+const secret_key = process.env.UPBIT_OPEN_API_SECRET_KEY;
+const server_url = process.env.UPBIT_OPEN_API_SERVER_URL;
 
-function handleListening() {
-  console.log(`Listening on: http://localhost:${PORT}`);
-}
+const payload = {
+  access_key: access_key,
+  nonce: uuidv4(),
+};
 
-function handleHome(req, res) {
-  res.send("Hello from home");
-}
+const token = sign(payload, secret_key);
+const options = {
+  method: "GET",
+  url: server_url + "/v1/accounts",
+  headers: { Authorization: `Bearer ${token}` },
+};
 
-function handleProfile(req, res) {
-  res.send("You are on my profile");
-}
-
-app.get("/", handleHome);
-
-app.get("/profile", handleProfile);
-
-app.listen(PORT, handleListening);
+request(options, (error, response, body) => {
+  if (error) throw new Error(error);
+  console.log(body);
+});
