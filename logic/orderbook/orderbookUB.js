@@ -5,6 +5,6 @@ export default function orderbookUB() {
     .get("https://api.upbit.com/v1/orderbook", {
       params: { markets: "KRW-BTC" },
     })
-    .then((res) => console.log(res.data[0].orderbook_units[0]))
+    .then((res) => console.log("업비트", res.data[0].orderbook_units[0]))
     .catch((err) => console.log(err.response));
 }
