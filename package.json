@@ -4,7 +4,9 @@
   "description": "하하호호",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec babel-node index"
+    "dev": "nodemon --exec babel-node index",
+    "migrate": "npx prisma migrate dev --preview-feature",
+    "studio": "npx prisma studio"
   },
   "repository": {
     "type": "git",
@@ -21,9 +23,11 @@
     "@babel/core": "^7.18.9",
     "@babel/node": "^7.18.9",
     "@babel/preset-env": "^7.18.9",
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "prisma": "^4.2.1"
   },
   "dependencies": {
+    "@prisma/client": "^4.2.1",
     "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
