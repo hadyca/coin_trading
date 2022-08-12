@@ -14,12 +14,13 @@ const BITTHUMB = "BIT_THUMB";
 
 const test = async () => {
   const url = process.env.TELEGRAM_URL;
-  const coin = "ETH";
+  const coin = "XRP";
   // axios.post(url, {
   //   chat_id: process.env.TELEGRAM_ID,
-  //   text: `업비트 ${ubBidOrigin} 매도, 빗썸 ${bsAskOrigin} 매수 // 차액 ${
-  //     ubBidOrigin - bsAskOrigin
-  //   }`,
+  //   // text: `업비트 ${ubBidOrigin} 매도, 빗썸 ${bsAskOrigin} 매수 // 차액 ${
+  //   //   ubBidOrigin - bsAskOrigin
+  //   // }`,
+  //   text: `안녕 셩준아`,
   // });
 
   const ubResult = await orderbookUB(`KRW-${coin}`);
@@ -81,7 +82,7 @@ const test = async () => {
   //     },
   //   });
   // } catch (error) {
-  //   console.log(error)
+  //   console.log(error);
   // }
 };
 
