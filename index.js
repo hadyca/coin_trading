@@ -14,7 +14,7 @@ const BITTHUMB = "BIT_THUMB";
 
 const test = async () => {
   const url = process.env.TELEGRAM_URL;
-  const coin = "XRP";
+  const coin = "bch";
   // axios.post(url, {
   //   chat_id: process.env.TELEGRAM_ID,
   //   // text: `업비트 ${ubBidOrigin} 매도, 빗썸 ${bsAskOrigin} 매수 // 차액 ${
@@ -32,11 +32,11 @@ const test = async () => {
   const bsAskOrigin = bsResult.data.asks[0].price; //c
   const bsBidOrigin = bsResult.data.bids[0].price; //d
 
-  console.log("업비트 매도호가", ubAskOrigin);
-  console.log("업비트 매수호가", ubBidOrigin);
+  // console.log("업비트 매도호가", ubAskOrigin);
+  // console.log("업비트 매수호가", ubBidOrigin);
 
-  console.log("빗썸 매도호가", bsAskOrigin);
-  console.log("빗썸 매수호가", bsBidOrigin);
+  // console.log("빗썸 매도호가", bsAskOrigin);
+  // console.log("빗썸 매수호가", bsBidOrigin);
 
   const ubAsk = ubAskOrigin * (1 - UPBIT_FEE);
   const ubBid = ubBidOrigin * (1 - UPBIT_FEE);
@@ -52,13 +52,35 @@ const test = async () => {
 
   //   console.log("업비트 매수, 빗썸 매도 차액", ubBid - bsAsk);
   //   console.log("업비트 매도, 빗썸 매수 차액", bsAsk - ubBid);
-  console.log(ubBidOrigin - bsAskOrigin);
   if (ubBidOrigin - bsAskOrigin > 0) {
     console.log(
       `${coin}업비트 ${ubBidOrigin} 매도, 빗썸 ${bsAskOrigin} 매수 // 차액 ${
         ubBidOrigin - bsAskOrigin
       }`
     );
+    try {
+      const exist = await client.trading.findFirst({
+        where: {
+          difference: ubBidOrigin - bsAskOrigin,
+        },
+      });
+      if (!exist) {
+        await client.trading.create({
+          data: {
+            bidShop: UBBIT,
+            bidPrice: 2000,
+            bidFee: 10,
+            askShop: BITTHUMB,
+            askPrice: 2100,
+            askFee: 20,
+            difference: 100,
+            netIncome: 70,
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   } else if (bsBidOrigin - ubAskOrigin > 0) {
     console.log(
       `${coin}업비트 ${ubAskOrigin} 매수, 빗썸 ${bsBidOrigin} 매도 // 차액 ${
@@ -68,28 +90,12 @@ const test = async () => {
   } else {
     console.log(`${coin}불발!`);
   }
-  // try {
-  //   await client.trading.create({
-  //     data: {
-  //       bidShop: UBBIT,
-  //       bidPrice: 2000,
-  //       bidFee: 10,
-  //       askShop: BITTHUMB,
-  //       askPrice: 2100,
-  //       askFee: 20,
-  //       difference: 100,
-  //       netIncome: 70,
-  //     },
-  //   });
-  // } catch (error) {
-  //   console.log(error);
-  // }
 };
 
-test();
+// test();
 
 const requestApi = () => setInterval(test, 1000);
 
-requestApi();
+// requestApi();
 
 //bid 매수, ask 매도
