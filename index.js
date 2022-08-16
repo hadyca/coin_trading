@@ -6,7 +6,7 @@ import orderbookUB from "./api/orderbook/orderbookUB";
 import client from "./client";
 
 const UPBIT_FEE = 0.0005; // 최소 주문 5000원  0.0005;
-const BITTHUMB_FEE = 0.0025; // 최소 주문 500원, 쿠폰 적용 시, 0.0004 && 미 적용시 0.0025
+const BITTHUMB_FEE = 0.0005; // 최소 주문 500원, 쿠폰 적용 시, 0.0004 && 미 적용시 0.0025
 
 const UBBIT = "UB_BIT";
 const BITTHUMB = "BIT_THUMB";
@@ -14,7 +14,7 @@ const BITTHUMB = "BIT_THUMB";
 
 const test = async () => {
   const url = process.env.TELEGRAM_URL;
-  const coin = "bch";
+  const coin = "ANKR";
   // axios.post(url, {
   //   chat_id: process.env.TELEGRAM_ID,
   //   // text: `업비트 ${ubBidOrigin} 매도, 빗썸 ${bsAskOrigin} 매수 // 차액 ${
@@ -26,23 +26,23 @@ const test = async () => {
   const ubResult = await orderbookUB(`KRW-${coin}`);
   const bsResult = await orderbookBS(`${coin}_KRW`);
 
-  const ubAskOrigin = ubResult.ask_price; //a
-  const ubBidOrigin = ubResult.bid_price; //b
+  const ubAskOrigin = parseFloat(ubResult.ask_price); //a
+  const ubBidOrigin = parseFloat(ubResult.bid_price); //b
 
-  const bsAskOrigin = bsResult.data.asks[0].price; //c
-  const bsBidOrigin = bsResult.data.bids[0].price; //d
+  const bsAskOrigin = parseFloat(bsResult.data.asks[0].price); //c
+  const bsBidOrigin = parseFloat(bsResult.data.bids[0].price); //d
 
-  // console.log("업비트 매도호가", ubAskOrigin);
-  // console.log("업비트 매수호가", ubBidOrigin);
+  console.log("업비트 매도호가", ubAskOrigin);
+  console.log("업비트 매수호가", ubBidOrigin);
 
-  // console.log("빗썸 매도호가", bsAskOrigin);
-  // console.log("빗썸 매수호가", bsBidOrigin);
+  console.log("빗썸 매도호가", bsAskOrigin);
+  console.log("빗썸 매수호가", bsBidOrigin);
 
-  const ubAsk = ubAskOrigin * (1 - UPBIT_FEE);
-  const ubBid = ubBidOrigin * (1 - UPBIT_FEE);
+  const ubAskWithFee = ubAskOrigin * UPBIT_FEE;
+  const ubBidWithFee = ubBidOrigin * UPBIT_FEE;
 
-  const bsAsk = bsAskOrigin * (1 - BITTHUMB_FEE);
-  const bsBid = bsBidOrigin * (1 - BITTHUMB_FEE);
+  const bsAskwithFee = bsAskOrigin * BITTHUMB_FEE;
+  const bsBidwithFee = bsBidOrigin * BITTHUMB_FEE;
 
   // console.log("업비트 매도가(수수료 적용)", ubAsk);
   // console.log("업비트 매수가(수수료 적용)", ubBid);
@@ -56,7 +56,7 @@ const test = async () => {
     console.log(
       `${coin}업비트 ${ubBidOrigin} 매도, 빗썸 ${bsAskOrigin} 매수 // 차액 ${
         ubBidOrigin - bsAskOrigin
-      }`
+      } // 순수익 ${ubBidOrigin - bsAskOrigin - (BITTHUMB_FEE + UPBIT_FEE)}`
     );
     try {
       const exist = await client.trading.findFirst({
@@ -67,19 +67,21 @@ const test = async () => {
       if (!exist) {
         await client.trading.create({
           data: {
-            bidShop: UBBIT,
-            bidPrice: 2000,
-            bidFee: 10,
-            askShop: BITTHUMB,
-            askPrice: 2100,
-            askFee: 20,
-            difference: 100,
-            netIncome: 70,
+            coin,
+            bidShop: BITTHUMB,
+            bidPrice: bsAskOrigin,
+            bidFee: bsAskwithFee,
+            askShop: UBBIT,
+            askPrice: ubBidOrigin,
+            askFee: ubBidWithFee,
+            difference: ubBidOrigin - bsAskOrigin,
+            netIncome:
+              ubBidOrigin - bsAskOrigin - (ubBidWithFee + bsAskwithFee),
           },
         });
       }
     } catch (error) {
-      console.log(error);
+      console.log("에러메시지3", error);
     }
   } else if (bsBidOrigin - ubAskOrigin > 0) {
     console.log(
@@ -87,6 +89,31 @@ const test = async () => {
         bsBidOrigin - ubAskOrigin
       }`
     );
+    try {
+      const exist = await client.trading.findFirst({
+        where: {
+          difference: bsBidOrigin - ubAskOrigin,
+        },
+      });
+      if (!exist) {
+        await client.trading.create({
+          data: {
+            coin,
+            bidShop: UBBIT,
+            bidPrice: ubBidOrigin,
+            bidFee: ubBidWithFee,
+            askShop: BITTHUMB,
+            askPrice: bsAskOrigin,
+            askFee: bsAskwithFee,
+            difference: bsBidOrigin - ubAskOrigin,
+            netIncome:
+              bsBidOrigin - ubAskOrigin - (ubBidWithFee + bsAskwithFee),
+          },
+        });
+      }
+    } catch (error) {
+      console.log("에러메시지4", error);
+    }
   } else {
     console.log(`${coin}불발!`);
   }
@@ -96,6 +123,6 @@ const test = async () => {
 
 const requestApi = () => setInterval(test, 1000);
 
-// requestApi();
+requestApi();
 
 //bid 매수, ask 매도

@@ -12,13 +12,14 @@ generator client {
 
 model Trading {
   id                          Int                          @id @default(autoincrement())
+  coin                        String
   bidShop                     String //매수거래소
-  bidPrice                    Int //매수가
-  bidFee                      Int //매도수수료
+  bidPrice                    Float //매수가
+  bidFee                      Float //매도수수료
   askShop                     String //매도거래소
-  askPrice                    Int //매도가
-  askFee                      Int //매도수수료
-  difference                  Int //매도가-매수가
-  netIncome                   Int //(매도가-매수가)-(매도수수료+매수수수료)
+  askPrice                    Float //매도가
+  askFee                      Float //매도수수료
+  difference                  Float //매도가-매수가
+  netIncome                   Float //(매도가-매수가)-(매도수수료+매수수수료)
   createdAt                   DateTime                     @default(now())
 }

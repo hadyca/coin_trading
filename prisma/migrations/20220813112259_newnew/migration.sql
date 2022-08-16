@@ -1,0 +1,16 @@
+-- CreateTable
+CREATE TABLE "Trading" (
+    "id" SERIAL NOT NULL,
+    "coin" TEXT NOT NULL,
+    "bidShop" TEXT NOT NULL,
+    "bidPrice" DOUBLE PRECISION NOT NULL,
+    "bidFee" DOUBLE PRECISION NOT NULL,
+    "askShop" TEXT NOT NULL,
+    "askPrice" DOUBLE PRECISION NOT NULL,
+    "askFee" DOUBLE PRECISION NOT NULL,
+    "difference" DOUBLE PRECISION NOT NULL,
+    "netIncome" DOUBLE PRECISION NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Trading_pkey" PRIMARY KEY ("id")
+);

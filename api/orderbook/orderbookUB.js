@@ -7,6 +7,6 @@ export default async function orderbookUB(market) {
     });
     return result.data[0].orderbook_units[0];
   } catch (error) {
-    console.log(error);
+    console.log("에러메시지1", error);
   }
 }

@@ -10,6 +10,6 @@ export default async function orderbookBS(market) {
     );
     return result.data;
   } catch (error) {
-    console.log(error);
+    console.log("에러메시지2", error);
   }
 }
