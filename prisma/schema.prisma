@@ -21,5 +21,6 @@ model Trading {
   askFee                      Float //매도수수료
   difference                  Float //매도가-매수가
   netIncome                   Float //(매도가-매수가)-(매도수수료+매수수수료)
+  difRatio                    Float //순수차액/(매도가+매수가)
   createdAt                   DateTime                     @default(now())
 }

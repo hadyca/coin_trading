@@ -14,7 +14,7 @@ const BITTHUMB = "BIT_THUMB";
 
 const test = async () => {
   const url = process.env.TELEGRAM_URL;
-  const coin = "ANKR";
+  const coin = "ETH";
   // axios.post(url, {
   //   chat_id: process.env.TELEGRAM_ID,
   //   // text: `업비트 ${ubBidOrigin} 매도, 빗썸 ${bsAskOrigin} 매수 // 차액 ${
@@ -32,11 +32,11 @@ const test = async () => {
   const bsAskOrigin = parseFloat(bsResult.data.asks[0].price); //c
   const bsBidOrigin = parseFloat(bsResult.data.bids[0].price); //d
 
-  console.log("업비트 매도호가", ubAskOrigin);
-  console.log("업비트 매수호가", ubBidOrigin);
+  // console.log("업비트 매도호가", ubAskOrigin);
+  // console.log("업비트 매수호가", ubBidOrigin);
 
-  console.log("빗썸 매도호가", bsAskOrigin);
-  console.log("빗썸 매수호가", bsBidOrigin);
+  // console.log("빗썸 매도호가", bsAskOrigin);
+  // console.log("빗썸 매수호가", bsBidOrigin);
 
   const ubAskWithFee = ubAskOrigin * UPBIT_FEE;
   const ubBidWithFee = ubBidOrigin * UPBIT_FEE;
@@ -56,7 +56,7 @@ const test = async () => {
     console.log(
       `${coin}업비트 ${ubBidOrigin} 매도, 빗썸 ${bsAskOrigin} 매수 // 차액 ${
         ubBidOrigin - bsAskOrigin
-      } // 순수익 ${ubBidOrigin - bsAskOrigin - (BITTHUMB_FEE + UPBIT_FEE)}`
+      }`
     );
     try {
       const exist = await client.trading.findFirst({
@@ -77,6 +77,7 @@ const test = async () => {
             difference: ubBidOrigin - bsAskOrigin,
             netIncome:
               ubBidOrigin - bsAskOrigin - (ubBidWithFee + bsAskwithFee),
+            difRatio: (ubBidOrigin - bsAskOrigin) / (ubBidOrigin + bsAskOrigin),
           },
         });
       }
@@ -85,7 +86,7 @@ const test = async () => {
     }
   } else if (bsBidOrigin - ubAskOrigin > 0) {
     console.log(
-      `${coin}업비트 ${ubAskOrigin} 매수, 빗썸 ${bsBidOrigin} 매도 // 차액 ${
+      `${coin}빗썸 ${bsBidOrigin} 매도, 업비트 ${ubAskOrigin} 매수 // 차액 ${
         bsBidOrigin - ubAskOrigin
       }`
     );
@@ -100,14 +101,15 @@ const test = async () => {
           data: {
             coin,
             bidShop: UBBIT,
-            bidPrice: ubBidOrigin,
-            bidFee: ubBidWithFee,
+            bidPrice: ubAskOrigin,
+            bidFee: ubAskWithFee,
             askShop: BITTHUMB,
-            askPrice: bsAskOrigin,
-            askFee: bsAskwithFee,
+            askPrice: bsBidOrigin,
+            askFee: bsBidwithFee,
             difference: bsBidOrigin - ubAskOrigin,
             netIncome:
-              bsBidOrigin - ubAskOrigin - (ubBidWithFee + bsAskwithFee),
+              bsBidOrigin - ubAskOrigin - (ubAskWithFee + bsBidwithFee),
+            difRatio: (bsBidOrigin - ubAskOrigin) / (bsBidOrigin + ubAskOrigin),
           },
         });
       }
