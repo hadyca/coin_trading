@@ -29,18 +29,18 @@ const test = async () => {
   const coin_1 = "ETH";
   const coin_2 = "ETC";
   const coin_3 = "BCH";
-  const ubResult = await orderbookUB(
-    `KRW-${coin_1}`,
-    `KRW-${coin_2}`,
-    `KRW-${coin_3}`
-  );
-  console.log(ubResult);
-  const bsResult = await orderbookBS(
-    `${coin_1}_KRW`,
-    `${coin_2}_KRW`,
-    `${coin_3}_KRW`
-  );
-  console.log(bsResult);
+  const ubResult_1 = await orderbookUB(`KRW-${coin_1}`);
+  console.log(ubResult_1);
+
+  const ubResult_2 = await orderbookUB(`KRW-${coin_2}`);
+  console.log(ubResult_2);
+
+  // const bsResult = await orderbookBS(
+  //   `${coin_1}_KRW`,
+  //   `${coin_2}_KRW`,
+  //   `${coin_3}_KRW`
+  // );
+  // console.log(bsResult);
   // const ubAskOrigin = parseFloat(ubResult.ask_price); //a
   // const ubBidOrigin = parseFloat(ubResult.bid_price); //b
 
@@ -126,6 +126,6 @@ test();
 
 const requestApi = () => setInterval(test, 1000);
 
-requestApi();
+// requestApi();
 
 //bid 매수, ask 매도
