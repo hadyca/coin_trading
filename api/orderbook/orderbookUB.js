@@ -11,6 +11,7 @@ export default async function orderbookUB(market) {
       bid_price: result.data[0].orderbook_units[0].bid_price,
     };
   } catch (error) {
+    orderbookUB(market);
     console.log("errMessage1", error);
   }
 }
