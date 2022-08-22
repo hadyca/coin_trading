@@ -10,11 +10,12 @@ import execution from "./component/execution";
 
 const test = async () => {
   const url = process.env.TELEGRAM_URL;
-  const coin = "ETH";
 
-  const coin_1 = "ETH";
-  const coin_2 = "ETC";
-  const coin_3 = "BCH";
+  const coin_1 = "WAXP";
+  const coin_2 = "XRP";
+  const coin_3 = "QTUM";
+  const coin_4 = "XTZ";
+  const coin_5 = "ADA";
 
   const ubResult_1 = await orderbookUB(`KRW-${coin_1}`);
   const bsResult_1 = await orderbookBS(`${coin_1}_KRW`);
@@ -27,12 +28,20 @@ const test = async () => {
   const ubResult_3 = await orderbookUB(`KRW-${coin_3}`);
   const bsResult_3 = await orderbookBS(`${coin_3}_KRW`);
   await execution(coin_3, ubResult_3, bsResult_3);
+
+  const ubResult_4 = await orderbookUB(`KRW-${coin_4}`);
+  const bsResult_4 = await orderbookBS(`${coin_4}_KRW`);
+  await execution(coin_4, ubResult_4, bsResult_4);
+
+  const ubResult_5 = await orderbookUB(`KRW-${coin_5}`);
+  const bsResult_5 = await orderbookBS(`${coin_5}_KRW`);
+  await execution(coin_5, ubResult_5, bsResult_5);
 };
 
-test();
+// test();
 
 const requestApi = () => setInterval(test, 1000);
 
-// requestApi();
+requestApi();
 
 //bid 매수, ask 매도
