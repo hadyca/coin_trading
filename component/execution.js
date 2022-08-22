@@ -11,21 +11,23 @@ export default async function execution(coin, ubResult, bsResult) {
 
   const UPBIT_FEE = 0.0005; // 최소 주문 5000원  0.0005;
   const BITTHUMB_FEE = 0.0005; // 최소 주문 500원, 쿠폰 적용 시, 0.0004 && 미 적용시 0.0025
+  const everageFee = (UPBIT_FEE + BITTHUMB_FEE) / 2;
+
   const UBBIT = "UB_BIT";
   const BITTHUMB = "BIT_THUMB";
 
-  const ubAskOrigin = parseFloat(ubResult.ask_price); //a
-  const ubBidOrigin = parseFloat(ubResult.bid_price); //b
+  const ubAskOrigin = parseFloat(ubResult.ask_price);
+  const ubBidOrigin = parseFloat(ubResult.bid_price);
 
-  const bsAskOrigin = parseFloat(bsResult.ask_price); //c
-  const bsBidOrigin = parseFloat(bsResult.bid_price); //d
+  const bsAskOrigin = parseFloat(bsResult.ask_price);
+  const bsBidOrigin = parseFloat(bsResult.bid_price);
 
   const ubAskWithFee = ubAskOrigin * UPBIT_FEE;
   const ubBidWithFee = ubBidOrigin * UPBIT_FEE;
   const bsAskwithFee = bsAskOrigin * BITTHUMB_FEE;
   const bsBidwithFee = bsBidOrigin * BITTHUMB_FEE;
 
-  if ((ubBidOrigin - bsAskOrigin) / (ubBidOrigin + bsAskOrigin) > 0.0005) {
+  if ((ubBidOrigin - bsAskOrigin) / (ubBidOrigin + bsAskOrigin) > everageFee) {
     console.log(
       `${coin}빗썸 ${bsAskOrigin} 매수, 업비트 ${ubBidOrigin} 매도 // 차액 ${
         ubBidOrigin - bsAskOrigin
