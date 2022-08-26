@@ -1,4 +1,5 @@
 import axios from "axios";
+import accountsBS from "./api/accounts/accountsBS";
 require("dotenv").config();
 import accountsUp from "./api/accounts/accountsUB";
 import orderbookBS from "./api/orderbook/orderbookBS";
@@ -6,6 +7,7 @@ import orderbookUB from "./api/orderbook/orderbookUB";
 import client from "./client";
 import execution from "./component/execution";
 
+accountsBS();
 // accountsUp();
 
 const test = async () => {
@@ -40,8 +42,8 @@ const test = async () => {
 
 // test();
 
-const requestApi = () => setInterval(test, 1000);
+// const requestApi = () => setInterval(test, 1000);
 
-requestApi();
+// requestApi();
 
 //bid 매수, ask 매도
