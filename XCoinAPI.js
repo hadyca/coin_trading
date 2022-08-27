@@ -1,8 +1,7 @@
-const request = require("request");
+import request from "request";
+import cryptojsHmacSHA512 from "crypto-js/hmac-sha512";
 
-const hmacSHA512 = require("crypto-js/hmac-sha512");
-
-const XCoinAPI = class {
+export const XCoinAPI = class {
   constructor(api_key, api_secret) {
     this.apiUrl = "https://api.bithumb.com";
     this.api_key = api_key;
@@ -177,5 +176,3 @@ const chr = (codePt) => {
   }
   return String.fromCharCode(codePt);
 };
-
-module.exports.XCoinAPI = XCoinAPI;
