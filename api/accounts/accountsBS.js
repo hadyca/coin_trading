@@ -11,7 +11,7 @@ export default async function accountsBS() {
     };
 
     const result = await axios.post(
-      "https://api.bithumb.com/info/account",
+      `https://api.bithumb.com${req_query.endpoint}`,
       req_query,
       {
         headers: bithumbHeader(req_query),
