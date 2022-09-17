@@ -61,7 +61,7 @@ export default async function execution(coin, ubResult, bsResult) {
     }
   } else if (
     (bsBidOrigin - ubAskOrigin) / (bsBidOrigin + ubAskOrigin) >
-    0.0005
+    everageFee
   ) {
     console.log(
       `${coin}업비트 ${ubAskOrigin} 매수, 빗썸 ${bsBidOrigin} 매도 // 차액 ${

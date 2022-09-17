@@ -16,7 +16,7 @@ const test = async () => {
   const coin_1 = "WAXP";
   const coin_2 = "XRP";
   const coin_3 = "QTUM";
-  const coin_4 = "XTZ";
+  const coin_4 = "ETC";
   const coin_5 = "ADA";
 
   const ubResult_1 = await orderbookUB(`KRW-${coin_1}`);
@@ -42,8 +42,8 @@ const test = async () => {
 
 // test();
 
-// const requestApi = () => setInterval(test, 1000);
+const requestApi = () => setInterval(test, 1000);
 
-// requestApi();
+requestApi();
 
 //bid 매수, ask 매도

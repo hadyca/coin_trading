@@ -17,7 +17,6 @@ export default async function accountsBS() {
         headers: bithumbHeader(req_query),
       }
     );
-    console.log(result.data);
     return result.data;
   } catch (error) {
     console.log("accountError!", error);
