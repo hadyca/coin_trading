@@ -3,7 +3,7 @@ require("dotenv").config();
 const uuidv4 = require("uuid/v4");
 const sign = require("jsonwebtoken").sign;
 
-export default function accountsUp() {
+export default function accountsUB() {
   const access_key = process.env.UPBIT_OPEN_API_ACCESS_KEY; // 업비트에서 발급 받은 access_key
   const secret_key = process.env.UPBIT_OPEN_API_SECRET_KEY; // 업비트에서 발급 받은 secret_key
 
