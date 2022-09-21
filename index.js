@@ -10,7 +10,7 @@ import execution from "./component/execution";
 
 // accountsBS();
 // accountsUB();
-orderUB();
+// orderUB();
 const test = async () => {
   const url = process.env.TELEGRAM_URL;
 
