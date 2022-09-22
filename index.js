@@ -43,8 +43,8 @@ const test = async () => {
 
 // test();
 
-// const requestApi = () => setInterval(test, 1000);
+const requestApi = () => setInterval(test, 1000);
 
-// requestApi();
+requestApi();
 
 //bid 매수, ask 매도
