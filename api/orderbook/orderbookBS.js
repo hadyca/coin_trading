@@ -15,6 +15,6 @@ export default async function orderbookBS(market) {
     };
   } catch (error) {
     orderbookBS(market);
-    console.log("errMessage2", error);
+    console.log("BS orderbook error:", error);
   }
 }
