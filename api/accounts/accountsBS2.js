@@ -2,11 +2,12 @@ import axios from "axios";
 require("dotenv").config();
 import bithumbHeader from "../../component/bithumbHeader";
 
-export default async function accountsBS() {
+export default async function accountsBS2() {
   try {
     const req_query = {
-      endpoint: "/info/balance",
-      currency: "XRP",
+      endpoint: "/info/account",
+      order_currency: "BTC",
+      payment_currency: "KRW",
     };
 
     const result = await axios.post(

@@ -5,16 +5,15 @@ const crypto = require("crypto");
 const sign = require("jsonwebtoken").sign;
 const queryEncode = require("querystring").encode;
 
-export default function orderUB() {
+export default function withrawUB() {
   const access_key = process.env.UPBIT_OPEN_API_ACCESS_KEY;
   const secret_key = process.env.UPBIT_OPEN_API_SECRET_KEY;
 
   const body = {
-    market: "KRW-XRP",
-    side: "bid",
-    // volume: "10", //수량
-    price: "5000", //가격
-    ord_type: "price",
+    currency: "XRP",
+    amount: "6.299270",
+    address: "rDxfhNRgCDNDckm45zT5ayhKDC4Ljm7UoP",
+    secondary_address: "1007385601",
   };
 
   const query = queryEncode(body);
@@ -30,7 +29,7 @@ export default function orderUB() {
 
   const token = sign(payload, secret_key);
   axios
-    .post("https://api.upbit.com/v1/orders", body, {
+    .post("https://api.upbit.com/v1/withdraws/coin", body, {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then((res) => console.log(res.data))

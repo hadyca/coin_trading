@@ -2,11 +2,18 @@ import axios from "axios";
 require("dotenv").config();
 import bithumbHeader from "../../component/bithumbHeader";
 
-export default async function accountsBS() {
+export default async function withrawBS() {
   try {
     const req_query = {
-      endpoint: "/info/balance",
+      endpoint: "/trade/btc_withdrawal",
+      units: "21",
+      address: "raQwCVAJVqjrVm1Nj5SFRcX8i22BhdC9WA",
+      destination: "440248997",
       currency: "XRP",
+      exchange_name: "upbit",
+      cust_type_cd: "01",
+      ko_name: "김제형",
+      en_name: "kimjehyung",
     };
 
     const result = await axios.post(
@@ -18,6 +25,6 @@ export default async function accountsBS() {
     );
     return console.log(result.data);
   } catch (error) {
-    console.log("BS accountError!:", error);
+    console.log("BS withraw error!:", error);
   }
 }

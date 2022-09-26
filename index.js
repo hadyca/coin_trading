@@ -1,16 +1,32 @@
 import axios from "axios";
 import accountsBS from "./api/accounts/accountsBS";
+import accountsBS2 from "./api/accounts/accountsBS2";
 require("dotenv").config();
 import accountsUB from "./api/accounts/accountsUB";
+import orderCancelBS from "./api/order/orderCancelBS";
+import orderLimitBS from "./api/order/orderLimitBS";
+import orderMarketBuyBS from "./api/order/orderMarketBuyBS";
+import orderMarketSellBS from "./api/order/orderMarketSellBS";
 import orderUB from "./api/order/orderUB";
 import orderbookBS from "./api/orderbook/orderbookBS";
 import orderbookUB from "./api/orderbook/orderbookUB";
+import withrawBS from "./api/withdraw/withrawBS";
+import withrawUB from "./api/withdraw/withrawUB";
+
 import client from "./client";
 import execution from "./component/execution";
 
-// accountsBS();
 // accountsUB();
+// accountsBS();
 // orderUB();
+// withrawUB();
+// orderMarketBuyBS();
+// accountsBS2();
+// orderMarketSellBS();
+// orderLimitBS();
+// orderCancelBS();
+// withrawBS();
+// orderLimitBS();
 const test = async () => {
   const url = process.env.TELEGRAM_URL;
 
@@ -43,8 +59,8 @@ const test = async () => {
 
 // test();
 
-const requestApi = () => setInterval(test, 1000);
+// const requestApi = () => setInterval(test, 1000);
 
-requestApi();
+// requestApi();
 
 //bid 매수, ask 매도

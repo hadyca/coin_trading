@@ -2,11 +2,14 @@ import axios from "axios";
 require("dotenv").config();
 import bithumbHeader from "../../component/bithumbHeader";
 
-export default async function accountsBS() {
+export default async function orderCancelBS() {
   try {
     const req_query = {
-      endpoint: "/info/balance",
-      currency: "XRP",
+      endpoint: "/trade/cancel",
+      type: "bid",
+      order_id: "C0106000000444675452",
+      order_currency: "XRP",
+      payment_currency: "KRW",
     };
 
     const result = await axios.post(
@@ -18,6 +21,6 @@ export default async function accountsBS() {
     );
     return console.log(result.data);
   } catch (error) {
-    console.log("BS accountError!:", error);
+    console.log("BS market order error!:", error);
   }
 }
