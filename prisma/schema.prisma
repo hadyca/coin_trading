@@ -16,9 +16,9 @@ model Trading {
   buyShop                     String //매수거래소
   buyPrice                    Float //매수가
   buyFee                      Float //매도수수료
-  sellShop                     String //매도거래소
-  sellPrice                    Float //매도가
-  sellFee                      Float //매도수수료
+  sellShop                    String //매도거래소
+  sellPrice                   Float //매도가
+  sellFee                     Float //매도수수료
   difference                  Float //매도가-매수가
   netIncome                   Float //(매도가-매수가)-(매도수수료+매수수수료)
   difRatio                    Float //순수차액/(매도가+매수가)
