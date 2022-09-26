@@ -11,7 +11,7 @@ export default async function execution(coin, ubResult, bsResult) {
 
   const UPBIT_FEE = 0.0005; // 최소 주문 5000원  0.0005;
   const BITTHUMB_FEE = 0.0005; // 최소 주문 500원, 쿠폰 적용 시, 0.0004 && 미 적용시 0.0025
-  const everageFee = (UPBIT_FEE + BITTHUMB_FEE) / 2;
+  const targetRatio = (UPBIT_FEE + BITTHUMB_FEE) / 2;
 
   const UBBIT = "UB_BIT";
   const BITTHUMB = "BIT_THUMB";
@@ -27,7 +27,7 @@ export default async function execution(coin, ubResult, bsResult) {
   const bsAskwithFee = bsAskOrigin * BITTHUMB_FEE;
   const bsBidwithFee = bsBidOrigin * BITTHUMB_FEE;
 
-  if ((ubBidOrigin - bsAskOrigin) / (ubBidOrigin + bsAskOrigin) > everageFee) {
+  if ((ubBidOrigin - bsAskOrigin) / (ubBidOrigin + bsAskOrigin) > targetRatio) {
     console.log(
       `${coin}빗썸 ${bsAskOrigin} 매수, 업비트 ${ubBidOrigin} 매도 // 차액 ${
         ubBidOrigin - bsAskOrigin
@@ -61,7 +61,7 @@ export default async function execution(coin, ubResult, bsResult) {
     }
   } else if (
     (bsBidOrigin - ubAskOrigin) / (bsBidOrigin + ubAskOrigin) >
-    everageFee
+    targetRatio
   ) {
     console.log(
       `${coin}업비트 ${ubAskOrigin} 매수, 빗썸 ${bsBidOrigin} 매도 // 차액 ${
