@@ -2,24 +2,23 @@ import axios from "axios";
 require("dotenv").config();
 import bithumbHeader from "../../component/bithumbHeader";
 
-export default async function orderMarketBuyBS() {
+export default async function orderMarketBuyBS(coin, volume) {
   try {
     const req_query = {
       endpoint: "/trade/market_buy",
-      order_currency: "XRP",
+      order_currency: coin,
       payment_currency: "KRW",
-      units: "2", //수량임
+      units: volume,
     };
 
-    const result = await axios.post(
-      `https://api.bithumb.com${req_query.endpoint}`,
-      req_query,
-      {
-        headers: bithumbHeader(req_query),
-      }
-    );
-    return console.log(result.data);
+    const result = await axios({
+      url: `https://api.bithumb.com${req_query.endpoint}`,
+      method: "post",
+      headers: bithumbHeader(req_query),
+      data: req_query,
+    });
+    return result;
   } catch (error) {
-    console.log("BS market order error!:", error);
+    console.log("BS market buy error:", error);
   }
 }

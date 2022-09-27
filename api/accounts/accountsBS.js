@@ -9,14 +9,14 @@ export default async function accountsBS() {
       currency: "XRP",
     };
 
-    const result = await axios.post(
-      `https://api.bithumb.com${req_query.endpoint}`,
-      req_query,
-      {
-        headers: bithumbHeader(req_query),
-      }
-    );
-    return console.log(result.data);
+    const result = await axios({
+      url: `https://api.bithumb.com${req_query.endpoint}`,
+      method: "post",
+      data: req_query,
+      headers: bithumbHeader(req_query),
+    });
+    console.log(result.data);
+    return result;
   } catch (error) {
     console.log("BS accountError!:", error);
   }

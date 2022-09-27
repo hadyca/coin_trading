@@ -5,28 +5,13 @@ const crypto = require("crypto");
 const sign = require("jsonwebtoken").sign;
 const queryEncode = require("querystring").encode;
 
-export default async function orderUB(coin, side, volume, price) {
+export default async function historyUB(orderId) {
   const access_key = process.env.UPBIT_OPEN_API_ACCESS_KEY;
   const secret_key = process.env.UPBIT_OPEN_API_SECRET_KEY;
 
-  //시장가 : 매도 할 때는 수량을 지정, 매수 할 때는 금액을 지정
-  if (side === "ask") {
-    const body = {
-      market: `KRW-${coin}`,
-      side,
-      volume,
-      ord_type: "price",
-    };
-    return body;
-  } else if (side === "bid") {
-    const body = {
-      market: `KRW-${coin}`,
-      side,
-      price,
-      ord_type: "price",
-    };
-    return body;
-  }
+  const body = {
+    uuid: orderId,
+  };
 
   const query = queryEncode(body);
   const hash = crypto.createHash("sha512");
@@ -40,15 +25,25 @@ export default async function orderUB(coin, side, volume, price) {
   };
 
   const token = sign(payload, secret_key);
+
   try {
     const result = await axios({
-      url: "https://api.upbit.com/v1/orders",
-      method: "post",
+      url: "https://api.upbit.com/v1/order?" + query,
+      method: "get",
       data: body,
       headers: { Authorization: `Bearer ${token}` },
     });
-    return result;
+    const trades = result.trades;
+    if (trades.length === 1) {
+      const everagePrice = trades[0].price * trades[0].volume;
+      return everagePrice;
+    } else {
+      const everagePrice =
+        contract.reduce((a, c) => a.price * a.volume + c.price * c.volume) /
+        contract.length;
+      return everagePrice;
+    }
   } catch (error) {
-    console.log(`UB ${side} error!:`, error);
+    console.log("UB history error!:", error);
   }
 }

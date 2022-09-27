@@ -13,6 +13,7 @@ export default function accountsUB() {
   };
 
   const token = sign(payload, secret_key);
+
   axios
     .get("https://api.upbit.com/v1/accounts", {
       headers: { Authorization: `Bearer ${token}` },
