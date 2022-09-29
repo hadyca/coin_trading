@@ -17,7 +17,8 @@ export default async function orderMarketBuyBS(coin, volume) {
       headers: bithumbHeader(req_query),
       data: req_query,
     });
-    return result;
+    console.log("BS result!", result.data);
+    return result.data;
   } catch (error) {
     console.log("BS market buy error:", error);
   }

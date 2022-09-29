@@ -17,11 +17,11 @@ import withrawUB from "./api/withdraw/withrawUB";
 import client from "./client";
 import exchange from "./component/exchange";
 
+// orderUB();
 // accountsUB();
 // accountsBS2();
 // withrawUB();
-orderMarketBuyBS("ETC", "10");
-// orderUB("XRP", "bid");
+// orderMarketBuyBS("ETC", "10");
 // accountsBS2();
 // orderMarketSellBS();
 // orderLimitBS();
@@ -29,7 +29,6 @@ orderMarketBuyBS("ETC", "10");
 // withrawBS();
 // orderLimitBS();
 // historyBS();
-// historyUB();
 
 const app = async () => {
   const coin_1 = "ETC";
@@ -59,10 +58,8 @@ const app = async () => {
   // await execution(coin_5, ubResult_5, bsResult_5);
 };
 
-// app();
+const requestApi = () => setInterval(app, 500);
 
-// const requestApi = () => setInterval(app, 1000);
-
-// requestApi();
+requestApi();
 
 //bid 매수, ask 매도

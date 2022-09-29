@@ -10,23 +10,33 @@ export default async function orderUB(coin, side, volume, price) {
   const secret_key = process.env.UPBIT_OPEN_API_SECRET_KEY;
 
   //시장가 : 매도 할 때는 수량을 지정, 매수 할 때는 금액을 지정
-  if (side === "ask") {
-    const body = {
-      market: `KRW-${coin}`,
-      side,
-      volume,
-      ord_type: "price",
-    };
-    return body;
-  } else if (side === "bid") {
-    const body = {
-      market: `KRW-${coin}`,
-      side,
-      price,
-      ord_type: "price",
-    };
-    return body;
-  }
+  // if (side === "ask") {
+  //   const body = {
+  //     market: `KRW-${coin}`,
+  //     side,
+  //     volume,
+  //     ord_type: "price",
+  //   };
+  // } else if (side === "bid") {
+  //   const body = {
+  //     market: `KRW-${coin}`,
+  //     side,
+  //     price,
+  //     ord_type: "price",
+  //   };
+  // }
+
+  const body =
+    side === "ask"
+      ? {
+          market: `KRW-${coin}`,
+          side,
+          volume,
+          ord_type: "market",
+        }
+      : side === "bid"
+      ? { market: `KRW-${coin}`, side, price, ord_type: "price" }
+      : null;
 
   const query = queryEncode(body);
   const hash = crypto.createHash("sha512");
@@ -47,8 +57,9 @@ export default async function orderUB(coin, side, volume, price) {
       data: body,
       headers: { Authorization: `Bearer ${token}` },
     });
-    return result;
+    return result.data;
   } catch (error) {
-    console.log(`UB ${side} error!:`, error);
+    console.log(`UB ${side} error!`);
+    return "error";
   }
 }

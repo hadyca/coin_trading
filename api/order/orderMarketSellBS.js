@@ -17,8 +17,8 @@ export default async function orderMarketSellBS(coin, volume) {
       headers: bithumbHeader(req_query),
       data: req_query,
     });
-    return result;
+    return result.data;
   } catch (error) {
-    console.log("BS market sell error:", error);
+    console.log("BS market sell error");
   }
 }

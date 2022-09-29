@@ -33,17 +33,19 @@ export default async function historyUB(orderId) {
       data: body,
       headers: { Authorization: `Bearer ${token}` },
     });
-    const trades = result.trades;
-    if (trades.length === 1) {
-      const everagePrice = trades[0].price * trades[0].volume;
+
+    if (result.data.trades.length === 1) {
+      const everagePrice =
+        result.data.trades[0].price * result.data.trades[0].volume;
       return everagePrice;
     } else {
       const everagePrice =
-        contract.reduce((a, c) => a.price * a.volume + c.price * c.volume) /
-        contract.length;
+        result.data.trades.reduce(
+          (a, c) => a.price * a.volume + c.price * c.volume
+        ) / result.data.trades.length;
       return everagePrice;
     }
   } catch (error) {
-    console.log("UB history error!:", error);
+    console.log("UB history error!");
   }
 }

@@ -28,6 +28,6 @@ export default async function historyBS(coin, orderId) {
       return everagePrice;
     }
   } catch (error) {
-    console.log("BS history error!:", error);
+    console.log("BS history error!");
   }
 }
