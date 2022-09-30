@@ -97,7 +97,8 @@ export default async function exchange(coin, ubResult, bsResult) {
       console.log("결과값BS", resultBS);
       if (!resultBS.order_id) {
         console.log("Bithumb not enough coins for sell");
-        return exchange(coin, ubResult, bsResult);
+        return;
+        // return exchange(coin, ubResult, bsResult);
       }
       const resultUB = await orderUB(
         coin,
