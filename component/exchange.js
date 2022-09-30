@@ -7,12 +7,16 @@ import orderMarketSellBS from "../api/order/orderMarketSellBS";
 import orderUB from "../api/order/orderUB";
 import client from "../client";
 
-export default async function exchange(coin, ubResult, bsResult) {
+export default async function exchange(
+  coin,
+  coinVolume,
+  targetRatio,
+  ubResult,
+  bsResult
+) {
   // (UPBIT_FEE + BITTHUMB_FEE) / 2; //수수료 평균
   const UPBIT_FEE = 0.0005; // 기본 수수료
   const BITTHUMB_FEE = 0.0005; // 50만원 쿠폰 적용 수수료
-  const targetRatio = 0.0006; // !!!평균 수수료 보단 높아야함!!!
-  const coinVolume = "1";
 
   const UBBIT = "UB_BIT";
   const BITTHUMB = "BIT_THUMB";
@@ -31,8 +35,7 @@ export default async function exchange(coin, ubResult, bsResult) {
       console.log(resultUB);
       if (!resultUB.uuid) {
         console.log("Ubbit not enough coins for sell");
-        return;
-        // return exchange(coin, ubResult, bsResult);
+        return exchange(coin, ubResult, bsResult);
       }
       const resultBS = await orderMarketBuyBS(coin, coinVolume);
 
