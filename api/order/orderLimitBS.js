@@ -2,15 +2,15 @@ import axios from "axios";
 require("dotenv").config();
 import bithumbHeader from "../../component/bithumbHeader";
 
-export default async function orderLimitBS() {
+export default async function orderLimitBS(coin, coinVolume, price, type) {
   try {
     const req_query = {
       endpoint: "/trade/place",
-      order_currency: "XRP",
+      order_currency: coin,
       payment_currency: "KRW",
-      units: "5", //수량임
-      price: "682.8",
-      type: "bid",
+      units: coinVolume,
+      price,
+      type,
     };
 
     const result = await axios.post(
@@ -22,6 +22,6 @@ export default async function orderLimitBS() {
     );
     return console.log(result.data);
   } catch (error) {
-    console.log("BS market order error!:", error);
+    console.log("BS market order error!");
   }
 }

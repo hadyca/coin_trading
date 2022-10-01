@@ -24,7 +24,7 @@ import exchange from "./component/exchange";
 // orderMarketBuyBS("ETC", "10");
 // accountsBS2();
 // orderMarketSellBS();
-// orderLimitBS();
+orderLimitBS("XRP", "2", "682.5", "bid");
 // orderCancelBS();
 // withrawBS();
 // orderLimitBS();
@@ -39,15 +39,17 @@ const app = async () => {
 
   const ubResult_1 = await orderbookUB(`KRW-${coin_1}`);
   const bsResult_1 = await orderbookBS(`${coin_1}_KRW`);
-  const targetRatio_1 = 0.0008;
-  await exchange(coin_1, "1", targetRatio_1, ubResult_1, bsResult_1);
+  const targetRatio_1 = 0.0006;
+  const coinVolume_1 = "1";
+  await exchange(coin_1, coinVolume_1, targetRatio_1, ubResult_1, bsResult_1);
 
   const ubResult_2 = await orderbookUB(`KRW-${coin_2}`);
   const bsResult_2 = await orderbookBS(`${coin_2}_KRW`);
-  const targetRatio_2 = 0.001;
-  await exchange(coin_2, "1", targetRatio_2, ubResult_2, bsResult_2);
+  const targetRatio_2 = 0.0006;
+  const coinVolume_2 = "10";
+  await exchange(coin_2, coinVolume_2, targetRatio_2, ubResult_2, bsResult_2);
 };
 
-const requestApi = () => setInterval(app, 500);
+// const requestApi = () => setInterval(app, 500);
 
-requestApi();
+// requestApi();

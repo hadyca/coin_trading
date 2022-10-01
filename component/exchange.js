@@ -2,6 +2,7 @@ require("dotenv").config();
 import axios from "axios";
 import historyBS from "../api/history/historyBS";
 import historyUB from "../api/history/historyUB";
+import orderLimitBS from "../api/order/orderLimitBS";
 import orderMarketBuyBS from "../api/order/orderMarketBuyBS";
 import orderMarketSellBS from "../api/order/orderMarketSellBS";
 import orderUB from "../api/order/orderUB";
@@ -31,13 +32,21 @@ export default async function exchange(
     try {
       // 업비트 매도, 빗썸 매수 실행
 
-      const resultUB = await orderUB(coin, "ask", coinVolume);
-      console.log(resultUB);
+      // const resultUB = await orderUB(coin, "ask", coinVolume, "market"); // 업비트 시장가 매도
+      const resultUB = await orderUB(
+        coin,
+        "ask",
+        coinVolume,
+        ubBidOrigin,
+        "limit"
+      ); //지정가 매도
+
       if (!resultUB.uuid) {
         console.log("Ubbit not enough coins for sell");
-        return exchange(coin, ubResult, bsResult);
+        return;
       }
-      const resultBS = await orderMarketBuyBS(coin, coinVolume);
+      // const resultBS = await orderMarketBuyBS(coin, coinVolume); //빗썸 시장가 매수
+      const resultBS = await orderLimitBS(coin, coinVolume, bsAskOrigin, "bid"); //빗썸 지정가 매수
 
       // 각 거래소 실제 거래가 조회
       const buyingPriceBS = await historyBS(coin, resultBS.order_id);
@@ -58,7 +67,7 @@ export default async function exchange(
           },
         });
       } catch (error) {
-        console.log("Telegram message error_1:", error);
+        console.log("Telegram message error_1");
       }
       //각 거래소 별 실제 거래가 DB 저장
       await client.trading.create({
@@ -88,7 +97,7 @@ export default async function exchange(
           text: "BS buying, UB sell error",
         },
       });
-      console.log("BS buying, UB sell error:", error);
+      console.log("BS buying, UB sell error");
     }
   } else if (
     (bsBidOrigin - ubAskOrigin) / (bsBidOrigin + ubAskOrigin) >
@@ -96,19 +105,29 @@ export default async function exchange(
   ) {
     try {
       // 빗썸 매도, 업비트 매수 실행
-      const resultBS = await orderMarketSellBS(coin, coinVolume);
+      // const resultBS = await orderMarketSellBS(coin, coinVolume); //빗썸 시장가 매도
+      const resultBS = await orderLimitBS(coin, coinVolume, bsBidOrigin, "ask"); //빗썸 지정가 매도
+
       console.log("결과값BS", resultBS);
       if (!resultBS.order_id) {
         console.log("Bithumb not enough coins for sell");
         return;
-        // return exchange(coin, ubResult, bsResult);
       }
+      // const resultUB = await orderUB(
+      //   coin,
+      //   "bid",
+      //   null,
+      //   ubAskOrigin * coinVolume,
+      //   "price"
+      // ); //시장가 매수
+
       const resultUB = await orderUB(
         coin,
         "bid",
-        null,
-        ubAskOrigin * coinVolume
-      );
+        coinVolume,
+        ubAskOrigin,
+        "limit"
+      ); //지정가 매수
       console.log("success! order UB!", resultUB);
       // 각 거래소 실제 거래가 조회
       const buyingPriceUB = await historyUB(resultUB.uuid);

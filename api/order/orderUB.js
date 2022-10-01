@@ -5,21 +5,35 @@ const crypto = require("crypto");
 const sign = require("jsonwebtoken").sign;
 const queryEncode = require("querystring").encode;
 
-export default async function orderUB(coin, side, volume, price) {
+export default async function orderUB(coin, side, volume, price, ord_type) {
   const access_key = process.env.UPBIT_OPEN_API_ACCESS_KEY;
   const secret_key = process.env.UPBIT_OPEN_API_SECRET_KEY;
 
-  //시장가 : 매도 할 때는 수량을 지정, 매수 할 때는 금액을 지정
+  //시장가 로직 : 매도 할 때는 수량을 지정, 매수 할 때는 금액을 지정
+  // const body =
+  //   side === "ask"
+  //     ? {
+  //         market: `KRW-${coin}`,
+  //         side,
+  //         volume,
+  //         ord_type,
+  //       }
+  //     : side === "bid"
+  //     ? { market: `KRW-${coin}`, side, price, ord_type }
+  //     : null;
+
+  //지정가 로직
   const body =
     side === "ask"
       ? {
           market: `KRW-${coin}`,
           side,
           volume,
-          ord_type: "market",
+          price,
+          ord_type,
         }
       : side === "bid"
-      ? { market: `KRW-${coin}`, side, price, ord_type: "price" }
+      ? { market: `KRW-${coin}`, side, price, ord_type }
       : null;
 
   const query = queryEncode(body);

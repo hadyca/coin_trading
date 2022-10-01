@@ -21,6 +21,6 @@ export default async function orderCancelBS() {
     );
     return console.log(result.data);
   } catch (error) {
-    console.log("BS market order error!:", error);
+    console.log("BS market order cancel error");
   }
 }
