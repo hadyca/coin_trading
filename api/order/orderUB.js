@@ -29,11 +29,11 @@ export default async function orderUB(coin, side, volume, price, ord_type) {
           market: `KRW-${coin}`,
           side,
           volume,
-          price,
+          price: String(price),
           ord_type,
         }
       : side === "bid"
-      ? { market: `KRW-${coin}`, side, price, ord_type }
+      ? { market: `KRW-${coin}`, side, price: String(price), ord_type }
       : null;
 
   const query = queryEncode(body);

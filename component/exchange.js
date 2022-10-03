@@ -108,7 +108,6 @@ export default async function exchange(
       // const resultBS = await orderMarketSellBS(coin, coinVolume); //빗썸 시장가 매도
       const resultBS = await orderLimitBS(coin, coinVolume, bsBidOrigin, "ask"); //빗썸 지정가 매도
 
-      console.log("결과값BS", resultBS);
       if (!resultBS.order_id) {
         console.log("Bithumb not enough coins for sell");
         return;
@@ -128,7 +127,6 @@ export default async function exchange(
         ubAskOrigin,
         "limit"
       ); //지정가 매수
-      console.log("success! order UB!", resultUB);
       // 각 거래소 실제 거래가 조회
       const buyingPriceUB = await historyUB(resultUB.uuid);
       const sellPriceBS = await historyBS(coin, resultBS.order_id);
