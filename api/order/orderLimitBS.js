@@ -10,6 +10,7 @@ export default async function orderLimitBS(coin, coinVolume, price, type) {
       payment_currency: "KRW",
       units: coinVolume,
       price: String(price),
+      type,
     };
 
     const result = await axios.post(
@@ -19,7 +20,7 @@ export default async function orderLimitBS(coin, coinVolume, price, type) {
         headers: bithumbHeader(req_query),
       }
     );
-    return console.log(result.data);
+    return result.data;
   } catch (error) {
     console.log(`BS limit ${type} order error!`);
   }

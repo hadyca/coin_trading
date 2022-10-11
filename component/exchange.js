@@ -3,8 +3,6 @@ import axios from "axios";
 import historyBS from "../api/history/historyBS";
 import historyUB from "../api/history/historyUB";
 import orderLimitBS from "../api/order/orderLimitBS";
-import orderMarketBuyBS from "../api/order/orderMarketBuyBS";
-import orderMarketSellBS from "../api/order/orderMarketSellBS";
 import orderUB from "../api/order/orderUB";
 import client from "../client";
 
@@ -28,47 +26,46 @@ export default async function exchange(
   const bsAskOrigin = parseFloat(bsResult.ask_price);
   const bsBidOrigin = parseFloat(bsResult.bid_price);
 
-  if ((ubBidOrigin - bsAskOrigin) / (ubBidOrigin + bsAskOrigin) > targetRatio) {
+  const ubAskVolume = ubResult.ask_size;
+  const ubBidVolume = ubResult.bid_size;
+
+  const bsAskVolume = bsResult.ask_size;
+  const bsBidVolume = bsResult.bid_size;
+
+  if (
+    (ubBidOrigin - bsAskOrigin) / (ubBidOrigin + bsAskOrigin) > targetRatio &&
+    ubBidVolume > coinVolume &&
+    bsAskVolume > coinVolume
+  ) {
     try {
       // 업비트 매도, 빗썸 매수 실행
-
-      // const resultUB = await orderUB(coin, "ask", coinVolume, "market"); // 업비트 시장가 매도
-      const resultUB = await orderUB(
-        coin,
-        "ask",
-        coinVolume,
-        ubBidOrigin,
-        "limit"
-      ); //지정가 매도
+      const resultUB = await orderUB(coin, "ask", coinVolume, ubBidOrigin); //지정가 매도
 
       if (!resultUB.uuid) {
         console.log("Ubbit not enough coins for sell");
         return;
       }
-      // const resultBS = await orderMarketBuyBS(coin, coinVolume); //빗썸 시장가 매수
+
       const resultBS = await orderLimitBS(coin, coinVolume, bsAskOrigin, "bid"); //빗썸 지정가 매수
+      // 슬리피지 조건 실행
 
       // 각 거래소 실제 거래가 조회
       const buyingPriceBS = await historyBS(coin, resultBS.order_id);
       const sellPriceUB = await historyUB(resultUB.uuid);
 
       //거래 값 텔레그램 메시지 보내기
-      try {
-        await axios({
-          url: process.env.TELEGRAM_URL,
-          method: "post",
-          data: {
-            chat_id: process.env.TELEGRAM_ID,
-            text: `빗썸 매수: ${buyingPriceBS}\n업비트 매도: ${sellPriceUB}\n차익: ${
-              sellPriceUB -
-              buyingPriceBS -
-              (buyingPriceBS * BITTHUMB_FEE + sellPriceUB * UPBIT_FEE)
-            }`,
-          },
-        });
-      } catch (error) {
-        console.log("Telegram message error_1");
-      }
+      await axios({
+        url: process.env.TELEGRAM_URL,
+        method: "post",
+        data: {
+          chat_id: process.env.TELEGRAM_ID,
+          text: `빗썸 매수: ${buyingPriceBS}\n업비트 매도: ${sellPriceUB}\n차익: ${
+            sellPriceUB -
+            buyingPriceBS -
+            (buyingPriceBS * BITTHUMB_FEE + sellPriceUB * UPBIT_FEE)
+          }`,
+        },
+      });
       //각 거래소 별 실제 거래가 DB 저장
       await client.trading.create({
         data: {
@@ -100,53 +97,38 @@ export default async function exchange(
       console.log("BS buying, UB sell error");
     }
   } else if (
-    (bsBidOrigin - ubAskOrigin) / (bsBidOrigin + ubAskOrigin) >
-    targetRatio
+    (bsBidOrigin - ubAskOrigin) / (bsBidOrigin + ubAskOrigin) > targetRatio &&
+    ubAskVolume > coinVolume &&
+    bsBidVolume > coinVolume
   ) {
     try {
       // 빗썸 매도, 업비트 매수 실행
-      // const resultBS = await orderMarketSellBS(coin, coinVolume); //빗썸 시장가 매도
       const resultBS = await orderLimitBS(coin, coinVolume, bsBidOrigin, "ask"); //빗썸 지정가 매도
 
       if (!resultBS.order_id) {
         console.log("Bithumb not enough coins for sell");
         return;
       }
-      // const resultUB = await orderUB(
-      //   coin,
-      //   "bid",
-      //   null,
-      //   ubAskOrigin * coinVolume,
-      //   "price"
-      // ); //시장가 매수
 
-      const resultUB = await orderUB(
-        coin,
-        "bid",
-        coinVolume,
-        ubAskOrigin,
-        "limit"
-      ); //지정가 매수
+      const resultUB = await orderUB(coin, "bid", coinVolume, ubAskOrigin); //지정가 매수
+      // 슬리피지 조건 실행
+
       // 각 거래소 실제 거래가 조회
       const buyingPriceUB = await historyUB(resultUB.uuid);
       const sellPriceBS = await historyBS(coin, resultBS.order_id);
       // 최종 값 텔레그램 메시지 보내기
-      try {
-        await axios({
-          url: process.env.TELEGRAM_URL,
-          method: "post",
-          data: {
-            chat_id: process.env.TELEGRAM_ID,
-            text: `업비트 매수: ${buyingPriceUB}\n빗썸 매도: ${sellPriceBS}\n차익: ${
-              sellPriceBS -
-              buyingPriceUB -
-              (buyingPriceUB * UPBIT_FEE + sellPriceBS * BITTHUMB_FEE)
-            }`,
-          },
-        });
-      } catch (error) {
-        console.log("Telegram message error_2");
-      }
+      await axios({
+        url: process.env.TELEGRAM_URL,
+        method: "post",
+        data: {
+          chat_id: process.env.TELEGRAM_ID,
+          text: `업비트 매수: ${buyingPriceUB}\n빗썸 매도: ${sellPriceBS}\n차익: ${
+            sellPriceBS -
+            buyingPriceUB -
+            (buyingPriceUB * UPBIT_FEE + sellPriceBS * BITTHUMB_FEE)
+          }`,
+        },
+      });
       //각 거래소 별 실제 거래가 DB 저장
       await client.trading.create({
         data: {

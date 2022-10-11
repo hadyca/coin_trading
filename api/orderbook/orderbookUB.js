@@ -9,6 +9,8 @@ export default async function orderbookUB(market) {
       market: result.data[0].market,
       ask_price: result.data[0].orderbook_units[0].ask_price,
       bid_price: result.data[0].orderbook_units[0].bid_price,
+      ask_size: result.data[0].orderbook_units[0].ask_size,
+      bid_size: result.data[0].orderbook_units[0].bid_size,
     };
   } catch (error) {
     orderbookUB(market);

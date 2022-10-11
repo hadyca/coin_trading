@@ -12,6 +12,8 @@ export default async function orderbookBS(market) {
       market: result.data.data.order_currency,
       ask_price: result.data.data.asks[0].price,
       bid_price: result.data.data.bids[0].price,
+      ask_size: result.data.data.asks[0].quantity,
+      bid_size: result.data.data.bids[0].quantity,
     };
   } catch (error) {
     orderbookBS(market);
