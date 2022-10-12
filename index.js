@@ -27,7 +27,7 @@ import exchange from "./component/exchange";
 // orderLimitBS("XRP", "2", "1000", "ask");
 // orderUB("ETC", "ask", "1", "50000", "limit");
 // orderCancelBS();
-withrawBS("ETC", "15");
+// withrawBS("ETC", "15");
 // orderLimitBS();
 // historyBS();
 // // orderUB("ETC", "ask", "1", 50000, "limit"); //업비트 지정가 매도 문제없음 확인
@@ -43,8 +43,8 @@ const app = async () => {
 
   const ubResult_1 = await orderbookUB(`KRW-${coin_1}`);
   const bsResult_1 = await orderbookBS(`${coin_1}_KRW`);
-  const targetRatio_1 = 0.0007;
-  const coinVolume_1 = "10";
+  const targetRatio_1 = 0.0008;
+  const coinVolume_1 = "15";
   await exchange(coin_1, coinVolume_1, targetRatio_1, ubResult_1, bsResult_1);
 
   // const ubResult_2 = await orderbookUB(`KRW-${coin_2}`);
@@ -57,6 +57,6 @@ const app = async () => {
 
 // app();
 
-// const requestApi = () => setInterval(app, 500);
+const requestApi = () => setInterval(app, 500);
 
-// requestApi();
+requestApi();
