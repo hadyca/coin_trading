@@ -43,7 +43,7 @@ const app = async () => {
 
   const ubResult_1 = await orderbookUB(`KRW-${coin_1}`);
   const bsResult_1 = await orderbookBS(`${coin_1}_KRW`);
-  const targetRatio_1 = 0.0008;
+  const targetRatio_1 = 0.001;
   const coinVolume_1 = "15";
   await exchange(coin_1, coinVolume_1, targetRatio_1, ubResult_1, bsResult_1);
 
