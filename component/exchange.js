@@ -20,22 +20,24 @@ export default async function exchange(
   const UBBIT = "UB_BIT";
   const BITTHUMB = "BIT_THUMB";
 
-  const ubAskOrigin = parseFloat(ubResult.ask_price);
-  const ubBidOrigin = parseFloat(ubResult.bid_price);
+  const ubAskOrigin = parseFloat(ubResult?.ask_price);
+  const ubBidOrigin = parseFloat(ubResult?.bid_price);
 
-  const bsAskOrigin = parseFloat(bsResult.ask_price);
-  const bsBidOrigin = parseFloat(bsResult.bid_price);
+  const bsAskOrigin = parseFloat(bsResult?.ask_price);
+  const bsBidOrigin = parseFloat(bsResult?.bid_price);
 
-  const ubAskVolume = ubResult.ask_size;
-  const ubBidVolume = ubResult.bid_size;
+  const ubAskVolume = parseFloat(ubResult?.ask_size);
+  const ubBidVolume = parseFloat(ubResult?.bid_size);
 
-  const bsAskVolume = bsResult.ask_size;
-  const bsBidVolume = bsResult.bid_size;
+  const bsAskVolume = parseFloat(bsResult?.ask_size);
+  const bsBidVolume = parseFloat(bsResult?.bid_size);
+  const ratio_1 = ((ubBidOrigin - bsAskOrigin) / ubBidOrigin).toFixed(5);
+  const ratio_2 = ((bsBidOrigin - ubAskOrigin) / bsBidOrigin).toFixed(5);
 
   if (
-    (ubBidOrigin - bsAskOrigin) / (ubBidOrigin + bsAskOrigin) > targetRatio &&
-    ubBidVolume > coinVolume &&
-    bsAskVolume > coinVolume
+    ratio_1 > targetRatio &&
+    ubBidVolume > parseFloat(coinVolume) &&
+    bsAskVolume > parseFloat(coinVolume)
   ) {
     try {
       // 업비트 매도, 빗썸 매수 실행
@@ -97,9 +99,9 @@ export default async function exchange(
       console.log("BS buying, UB sell error");
     }
   } else if (
-    (bsBidOrigin - ubAskOrigin) / (bsBidOrigin + ubAskOrigin) > targetRatio &&
-    ubAskVolume > coinVolume &&
-    bsBidVolume > coinVolume
+    ratio_2 > targetRatio &&
+    ubAskVolume > parseFloat(coinVolume) &&
+    bsBidVolume > parseFloat(coinVolume)
   ) {
     try {
       // 빗썸 매도, 업비트 매수 실행
