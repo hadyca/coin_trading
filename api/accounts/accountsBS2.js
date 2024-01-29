@@ -6,7 +6,7 @@ export default async function accountsBS2() {
   try {
     const req_query = {
       endpoint: "/info/account",
-      order_currency: "XRP",
+      order_currency: "BTC",
       payment_currency: "KRW",
     };
 

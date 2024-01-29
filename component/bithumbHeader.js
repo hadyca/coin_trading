@@ -1,5 +1,4 @@
 require("dotenv").config();
-import request from "request";
 import cryptojsHmacSHA512 from "crypto-js/hmac-sha512";
 
 export default function bithumbHeader(obj) {
